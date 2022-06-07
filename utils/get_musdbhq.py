@@ -18,7 +18,7 @@ def load_dataset(path, inst):
     return samples
 
 
-def get_musdbhq(path, p_val=0.25):
+def get_musdbhq(path, p_val=0.25, shuffle=False):
     """ """
 
     instruments = ["bass", "drums", "mixture", "vocals", "other"]
@@ -28,7 +28,8 @@ def get_musdbhq(path, p_val=0.25):
 
     # Shuffling the dataset and creating validation set
     _middle = int(len(trainval_set) * p_val // 1)
-    np.random.shuffle(trainval_set)
+    if shuffle:
+        np.random.shuffle(trainval_set)
     train_set = trainval_set[_middle:]
     val_set = trainval_set[:_middle]
 

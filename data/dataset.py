@@ -115,7 +115,9 @@ class SF_Dataset(Dataset):
         mixture = np.clip(mixture, -1, 1)
 
         stft_mixture = self.stft(mixture)[2]
-        stft_sources = {inst: BM(stft_mixture, self.stft(sources[inst])[2]) for inst in sources}
+        stft_sources = {
+            inst: BM(stft_mixture, self.stft(sources[inst])[2]) for inst in sources
+        }
         return stft_mixture.real, stft_sources
 
     def _getStem(self, stem, index):

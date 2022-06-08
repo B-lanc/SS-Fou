@@ -38,5 +38,3 @@ class DataParallel(torch.nn.DataParallel):
             return super().__getattr__(name)
         except AttributeError:
             return getattr(self.module, name)
-
-

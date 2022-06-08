@@ -69,7 +69,7 @@ class SSFou(nn.Module):
             raise ValueError(
                 f"Input data channel ({x.shape[1]}) does not match model channel ({self.aether['features'][0]})"
             )
-        if x.shape[2] != self.aether["n_fft"]//2 + 1:
+        if x.shape[2] != self.aether["n_fft"] // 2 + 1:
             warnings.warn(
                 f"Input data n_frames ({x.shape[3]}) does not match model n_frames ({self.aether['n_fft']}), it should still run, but unexpected behaviors may occur"
             )

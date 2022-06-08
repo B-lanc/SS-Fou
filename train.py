@@ -76,7 +76,7 @@ def main(args):
     criterion = torch.nn.MSELoss()
     state = {"steps": 0, "epochs": 0, "best loss": np.inf}
     if args.cuda:
-        #ssfou = model_utils.DataParallel(ssfou)
+        # ssfou = model_utils.DataParallel(ssfou)
         ssfou.cuda()
     if args.load_model is not None:
         print(f"Continuing training from checkpoint {args.load_model}")
@@ -90,7 +90,9 @@ def main(args):
             if state["epochs"] % args.shuffle_freq == 0:
                 print("Shuffling dataset")
                 train_data.shuffle()
-                dataloader = torch.utils.data.DataLoader(train_data, args.batch_size, shuffle=True)
+                dataloader = torch.utils.data.DataLoader(
+                    train_data, args.batch_size, shuffle=True
+                )
 
         avg_loss = 0
         print(f"Training from epoch : {state['epochs']}, step : {state['steps']}")

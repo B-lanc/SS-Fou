@@ -1,12 +1,13 @@
 import os
 import torch
+import numpy as np
 
 
 def save_model(model, optimizer, state, path):
     if isinstance(model, torch.nn.DataParallel):
         model = model.module
     if not os.path.exists(os.path.dirname(path)):
-        os.path.makedirs(os.path.dirname(path))
+        os.makedirs(os.path.dirname(path))
     torch.save(
         {
             "model_state_dict": model.state_dict(),
@@ -37,3 +38,5 @@ class DataParallel(torch.nn.DataParallel):
             return super().__getattr__(name)
         except AttributeError:
             return getattr(self.module, name)
+
+

@@ -2,13 +2,14 @@ import os
 from tqdm import tqdm
 from functools import partial
 import random
+import warnings
 
 import h5py
 import numpy as np
 from scipy.signal import stft
 from sortedcontainers import SortedList
 from torch.utils.data import Dataset
-from .utils import load_audio
+from .utils import load_audio, BM
 
 
 class SF_Dataset(Dataset):
@@ -114,8 +115,8 @@ class SF_Dataset(Dataset):
         mixture = np.clip(mixture, -1, 1)
 
         stft_mixture = self.stft(mixture)[2]
-        stft_sources = {inst: self.stft(sources[inst])[2] for inst in sources}
-        return stft_mixture, stft_sources
+        stft_sources = {inst: BM(stft_mixture, self.stft(sources[inst])[2]) for inst in sources}
+        return stft_mixture.real, stft_sources
 
     def _getStem(self, stem, index):
         audio_idx = self._start_pos.bisect_right(index)

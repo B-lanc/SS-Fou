@@ -46,7 +46,7 @@ def main(args):
     augment_func = partial(random_amplify, p_min=0.3, p_max=1.3)
 
     train_data = SF_Dataset(
-        musdb,
+        musdb['train'],
         args.hdf_dir,
         args.hdf_filename + "_train",
         ssfou.aether,
@@ -55,7 +55,7 @@ def main(args):
         sr=args.sr,
     )
     val_data = SF_Dataset(
-        musdb,
+        musdb['val'],
         args.hdf_dir,
         args.hdf_filename + "_val",
         ssfou.aether,
@@ -63,7 +63,7 @@ def main(args):
         sr=args.sr,
     )
     test_data = SF_Dataset(
-        musdb,
+        musdb['test'],
         args.hdf_dir,
         args.hdf_filename + "_test",
         ssfou.aether,

@@ -123,7 +123,29 @@ def main(args):
         state["epochs"] += 1
         print(f"Training average loss : {avg_loss}")
 
-        if state["epochs"] % args.saving_frequency == 0:
+        if state["epochs"] % args.validation_freq == 0:
+            ssfou.eval()
+            val_dataloader = torch.utils.data.DataLoader(
+                val_data, args.batch_size, shuffle=False
+            )
+            avg_loss = 0
+            with tqdm(total=len(val_data) // args.batch_size) as pbar:
+                for idx, (mixture, source) in enumerate(val_dataloader):
+                    if args.cuda:
+                        mixture = mixture.cuda()
+                        for key in list(source.keys()):
+                            source[key] = source[key].cuda()
+
+                    total_loss = 0
+                    output = ssfou(mixture
+                    
+                    for inst in ssfou.aether["instruments"]:
+                        loss = criterion(output[inst], source[inst])
+                        total_loss += loss.item()
+                    avg_loss = avg_loss + (total_loss / len(ssfou.aether["instruments"]) - avg_loss) / (idx + 1)
+                    pbar.set_description(f"current_loss : {avg_loss}")
+                    pbar.update(1)
+        if state["epochs"] % args.saving_freq == 0:
             model_utils.save_model(ssfou, optimizer, state, args.checkpoint_dir)
 
 
@@ -206,10 +228,16 @@ if __name__ == "__main__":
         help="Amount of epochs the model is to be trained for, don't specify for infinite training",
     )
     parser.add_argument(
-        "--saving_frequency",
+        "--saving_freq",
         type=int,
         default=1,
-        help="Frequency of saving the model (epohcs)",
+        help="Frequency of saving the model (epochs)",
+    )
+    parser.add_argument(
+        "--validation_freq",
+        type=int,
+        default=1,
+        help="Frequency of model validation (epochs"
     )
 
     args = parser.parse_args()

@@ -46,7 +46,7 @@ def main(args):
     augment_func = partial(random_amplify, p_min=0.3, p_max=1.3)
 
     train_data = SF_Dataset(
-        musdb['train'],
+        musdb["train"],
         args.hdf_dir,
         args.hdf_filename + "_train",
         ssfou.aether,
@@ -55,7 +55,7 @@ def main(args):
         sr=args.sr,
     )
     val_data = SF_Dataset(
-        musdb['val'],
+        musdb["val"],
         args.hdf_dir,
         args.hdf_filename + "_val",
         ssfou.aether,
@@ -63,7 +63,7 @@ def main(args):
         sr=args.sr,
     )
     test_data = SF_Dataset(
-        musdb['test'],
+        musdb["test"],
         args.hdf_dir,
         args.hdf_filename + "_test",
         ssfou.aether,
@@ -137,12 +137,14 @@ def main(args):
                             source[key] = source[key].cuda()
 
                     total_loss = 0
-                    output = ssfou(mixture
-                    
+                    output = ssfou(mixture)
+
                     for inst in ssfou.aether["instruments"]:
                         loss = criterion(output[inst], source[inst])
                         total_loss += loss.item()
-                    avg_loss = avg_loss + (total_loss / len(ssfou.aether["instruments"]) - avg_loss) / (idx + 1)
+                    avg_loss = avg_loss + (
+                        total_loss / len(ssfou.aether["instruments"]) - avg_loss
+                    ) / (idx + 1)
                     pbar.set_description(f"current_loss : {avg_loss}")
                     pbar.update(1)
         if state["epochs"] % args.saving_freq == 0:
@@ -237,7 +239,7 @@ if __name__ == "__main__":
         "--validation_freq",
         type=int,
         default=1,
-        help="Frequency of model validation (epochs"
+        help="Frequency of model validation (epochs",
     )
 
     args = parser.parse_args()

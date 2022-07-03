@@ -35,21 +35,24 @@ def predict_song(model, song_path, cuda=False, sr=44100):
 
     with torch.no_grad():
         sources = {key: np.zeros(mixture.shape) for key in model.aether["instruments"]}
-        for _window in range(0, mixture.shape[1], _input_size):
+        for _window in range(0, mixture.shape[1] - _input_size + 1, _input_size // 2):
             curr_mixture = mixture[:, _window : _window + _input_size]
             curr_stft = _stft(curr_mixture)[2]
             torch_curr_stft = torch.from_numpy(curr_stft.real).unsqueeze(0)
             if cuda:
                 torch_curr_stft = torch_curr_stft.cuda()
             output = model(torch_curr_stft)
-            
+
             for inst in model.aether["instruments"]:
                 output[inst] = output[inst].squeeze(0).cpu().numpy()
                 output[inst][output[inst] >= 0.5] = 1
                 output[inst][output[inst] < 0.5] = 0
-                sources[inst][:, _window : _window + _input_size] = _istft(
-                    output[inst] * curr_stft
-                )[1]
+                _starting_window = _input_size // 4
+                if _window == 0:
+                    _starting_window = 0
+                sources[inst][
+                    :, _window + _starting_window : _window + _input_size
+                ] = _istft(output[inst] * curr_stft)[1][:, _starting_window:]
     for inst in model.aether["instruments"]:
         sources[inst] = sources[inst][:, :_length]
 

@@ -88,7 +88,9 @@ class SF_Dataset(Dataset):
                 )
 
             _lengths = [f[str(idx)].attrs["length"] for idx in range(len(f))]
-        _lengths = [(l // aether["input_size"]) + 1 for l in _lengths]
+        _lengths = [
+            (l // aether["input_size"]) + 1 for l in _lengths
+        ]  # Needs fix to take into account edge case where length of song is a multiple of input_size
 
         self._start_pos = SortedList(np.cumsum(_lengths))
         self._length = self._start_pos[-1]

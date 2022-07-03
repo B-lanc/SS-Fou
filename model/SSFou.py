@@ -71,11 +71,11 @@ class SSFou(nn.Module):
             )
         if x.shape[2] != self.aether["n_fft"] // 2 + 1:
             warnings.warn(
-                f"Input data n_frames ({x.shape[3]}) does not match model n_frames ({self.aether['n_fft']}), it should still run, but unexpected behaviors may occur"
+                f"Input data n_frames ({x.shape[2]}) does not match model n_frames ({self.aether['n_fft']}), it should still run, but unexpected behaviors may occur"
             )
         if x.shape[3] != self.aether["n_frames"]:
             warnings.warn(
-                f"Input data n_frames ({x.shape[2]}) does not match model n_frames ({self.aether['n_frames']}), it should still run, but unexpected behaviors may occur"
+                f"Input data n_frames ({x.shape[3]}) does not match model n_frames ({self.aether['n_frames']}), it should still run, but unexpected behaviors may occur"
             )
 
         _out = dict()

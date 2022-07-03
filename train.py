@@ -148,7 +148,12 @@ def main(args):
                     pbar.set_description(f"current_loss : {avg_loss}")
                     pbar.update(1)
         if state["epochs"] % args.saving_freq == 0:
-            model_utils.save_model(ssfou, optimizer, state, os.path.join(args.checkpoint_dir, f"checkpoint_{state['epochs']}"))
+            model_utils.save_model(
+                ssfou,
+                optimizer,
+                state,
+                os.path.join(args.checkpoint_dir, f"checkpoint_{state['epochs']}"),
+            )
 
 
 if __name__ == "__main__":
